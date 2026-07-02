@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- the LAPLAS / ISOMORPH mark: concentric nested diamonds, ink on transparent -->
+  <g fill="none" stroke="#111111" stroke-width="7" stroke-linejoin="round">
+    <path d="M64,13 L116,65 L64,117 L12,65 Z"/>
+    <path d="M64,29 L100,65 L64,101 L28,65 Z"/>
+    <path d="M64,45 L84,65 L64,85 L44,65 Z"/>
+  </g>
+</svg>
