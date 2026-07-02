@@ -192,7 +192,14 @@ def main() -> int:
     print(f"laplaspack: {a.pack}")
     print(f"  format_version = {m.get('format_version', '?')}   head_sha = {(m.get('head_sha') or '')[:12]}")
     if m.get("owner"):
-        print(f"  signed by owner = {m['owner'][:16]}…  (sig_alg={m.get('sig_alg', '?')})")
+        print(f"  owner = {m['owner'][:24]}")
+    if m.get("sig"):
+        # presence only — checking it is laplaspack_seal.py's job (needs Ed25519,
+        # which the stdlib doesn't have; this reader stays zero-dependency)
+        print(f"  seal  = {m.get('sig_alg', '?')} key {m.get('sig_pubkey', '')[:16]}…  "
+              f"(check: laplaspack_seal.py verify)")
+    else:
+        print("  seal  = none (unsigned)")
     c = s["counts"]
     print(f"  entities={c['entities']}  edges={c['edges']}  thinks={c['thinks']}")
     print(f"  causal roles: " + ", ".join(f"{k}×{v}" for k, v in s["edge_roles"].items()

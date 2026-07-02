@@ -169,22 +169,34 @@ and from which source revision, did this fact enter the pack."
 
 ### 3.7 Signing & integrity (trust layer)
 
-A pack MAY be signed: `manifest.owner` = an Ed25519 public key, `manifest.sig` =
-a detached signature (`sig_alg` names the scheme) over the canonical byte stream
-(the ordered `lmd_source` shards + manifest identity fields). Verification is
-**offline** and requires no service. An unsigned pack is valid but
-unattributed; a signed pack lets a mounter verify *who* authored the memory
-before trusting its contents. (Reference sealing lives in the desktop client;
-promoting it into the engine export path is tracked separately.)
+A pack MAY be sealed with Ed25519. The reference implementation is
+[`laplaspack_seal.py`](./laplaspack_seal.py) (the one tool in this repo with a
+dependency — `cryptography`; Python's stdlib has no Ed25519):
+
+- manifest keys: `sig_alg` = `ed25519` · `sig_pubkey` = raw public key (hex) ·
+  `sig` = detached signature (hex) · `sig_digest_v` = `1`.
+- **digest v1**: SHA-256 over the pack's *content* tables — `manifest` minus
+  the `sig_*` keys, `lmd_source`, `entities`, `edges`, `thinks`, `commits` —
+  rows sorted, fields joined with `0x1f`, rows with `0x1e`, each table prefixed
+  by `0x1d + name`. Content-level, so byte-level SQLite differences don't
+  affect validity; any content edit invalidates the seal.
+- Verification is **offline** and requires no service or secret:
+  `laplaspack_seal.py verify pack.laplaspack` → exit 0 valid · 1 invalid · 2 unsigned.
+
+An unsigned pack is valid but unattributed; a sealed pack lets a mounter verify
+*who* sealed the memory and that it is untampered, before trusting its
+contents. (The desktop client ships an earlier sealing path; converging it on
+digest v1 is tracked.)
 
 ### 3.8 Redaction / partial views
 
 Fields carry a visibility tier — `open` (default) · `masked` · `secret`. An
 **export** MAY omit or mask non-`open` fields (and think bodies) to produce a
 shareable partial view of a pack without leaking private reasoning. A reader
-sees only what the exporter chose to include; there is no hidden channel. (Full
-think-body redaction on export is a required trust fix, tracked for the desktop
-export path.)
+sees only what the exporter chose to include; there is no hidden channel.
+**Status: specified, not yet in the reference tools** — redaction currently
+ships in the desktop client's export path; a reference `redact` tool is
+tracked (see §8).
 
 ---
 
@@ -267,11 +279,29 @@ with only the source + this spec + the grammar.
 ## 7. Open questions (tracked)
 
 - Stable-ID migration (v2 slugs → v3 opaque) + the alias-map format.
-- Canonical byte-stream definition for signing (shard order, manifest subset).
 - Delta/patch packs (subscribe to another pack's updates) vs full rebuild.
+- **Merge semantics.** Thinks fold deterministically (LWW, §3.5); concurrent
+  edits to *entities/edges* by multiple writers have **no defined merge** yet —
+  today the source is canonical and single-writer-per-shard is assumed. A CRDT
+  or shard-partition rule is required before multi-writer packs.
 - Untrusted-pack safety: a mounted pack's contents enter an LLM context; the
   spec must define an isolation / provenance-labeling contract before packs are
   traded between strangers.
+- Hub addressing (`laplas://`, [HUB.md](./HUB.md)) is a **draft**: publish /
+  fetch / grant / mount semantics are specified, not yet reference-implemented.
+
+## 8. Implementation status (reference tools in this repo)
+
+| Spec section | Property | Status |
+|---|---|---|
+| §3.3 causal walk | `--why` ordered ancestry, offline | ✅ `laplaspack_reader.py` |
+| §3.5 think fold | LWW by (host, id), tombstones | ✅ reader |
+| §3.1 identity | authored `>>id:` (rename-safe); dangling refs fail the build | ✅ `laplaspack_writer.py` |
+| §3.6 provenance | `commits` row per build | ✅ writer |
+| §3.7 sealing | Ed25519 sign/verify, digest v1 | ✅ `laplaspack_seal.py` (needs `cryptography`) |
+| §3.8 redaction | tiered export | 🚧 desktop client only — reference tool tracked |
+| §5 hub | `laplas://` publish/fetch/grant/mount | 📝 draft ([HUB.md](./HUB.md)) |
+| §7 merge | multi-writer entities/edges | 📝 open question |
 
 *This spec is generated from the reference engine (`laplas_engine`) and kept in
 lockstep with it. Discrepancies between this document and the code are bugs in

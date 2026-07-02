@@ -81,11 +81,13 @@ def parse(src: str):
     entities: dict[str, dict] = {}
     edges: list[dict] = []
     thinks: list[dict] = []
+    problems: list[tuple[str, str]] = []   # (severity, message)
     cur: dict | None = None
     lines = src.replace("\r\n", "\n").split("\n")
     i = 0
     while i < len(lines):
         ln = lines[i]
+        lno = i + 1
         m = THINK_OPEN.match(ln.strip())
         if m and m.group(1).lower() not in ("end",):
             ttype = m.group(1).lower()
@@ -107,19 +109,27 @@ def parse(src: str):
                 "status": attrs.get("status") if ttype == "todo" else None,
                 "due": attrs.get("due"), "mentions": mentions, "thens": thens,
                 "deleted": 1 if attrs.get("deleted") in ("1", "true") else 0,
+                "line": lno,
             })
             i += 1
             continue
         s = ln.strip()
         m = LINK.match(s)
         if m:
-            edges.append({"src": m.group(1).strip(), "dst": m.group(3).strip(), "role": m.group(2)})
+            edges.append({"src": m.group(1).strip(), "dst": m.group(3).strip(),
+                          "role": m.group(2), "line": lno})
             i += 1
             continue
         m = DECL.match(s)
         if m:
             label = m.group(2).strip()
-            cur = entities.setdefault(slug(label), {"label": label, "type": None, "fields": {}})
+            key = slug(label)
+            if key in entities and entities[key]["label"] != label:
+                problems.append(("error",
+                    f"line {lno}: [[{label}]] collides with [[{entities[key]['label']}]] "
+                    f"(both slug to '{key}') — rename one"))
+            cur = entities.setdefault(key, {"label": label, "type": None, "fields": {},
+                                            "stable_id": None, "line": lno})
             i += 1
             continue
         m = PROP.match(s)
@@ -128,10 +138,60 @@ def parse(src: str):
             cur["fields"][k] = v
             if k == "type":
                 cur["type"] = v
+            if k == "id":  # SPEC §3.1: the authored, rename-safe handle
+                if v.startswith("lp_"):
+                    cur["stable_id"] = v
+                else:
+                    problems.append(("warning", f"line {lno}: >>id: should start with lp_ (got {v!r})"))
             i += 1
             continue
         i += 1
-    return entities, edges, thinks
+    return entities, edges, thinks, problems
+
+
+def validate(entities, edges, thinks, problems, *, allow_dangling: bool = False):
+    """Build-time consistency. Dangling references are ERRORS by default — the
+    pack is a build artifact, so a rename in source that misses a link line must
+    fail the build, not ship a silently broken graph."""
+    dang = "warning" if allow_dangling else "error"
+    known = {e["label"] for e in entities.values()}
+    ids_seen: dict[str, str] = {}
+    for eid, e in entities.items():
+        if e.get("stable_id"):
+            if e["stable_id"] in ids_seen:
+                problems.append(("error", f"[[{e['label']}]] reuses >>id: {e['stable_id']} "
+                                          f"(already on [[{ids_seen[e['stable_id']]}]])"))
+            ids_seen[e["stable_id"]] = e["label"]
+        if not (e["fields"].get("what") or "").strip():
+            problems.append(("warning", f"[[{e['label']}]] has no >>what: — it will be a bare label"))
+    for ed in edges:
+        for end in (ed["src"], ed["dst"]):
+            if end not in known:
+                problems.append((dang, f"line {ed['line']}: link references undeclared node [[{end}]]"))
+        if ed["src"] == ed["dst"]:
+            problems.append(("error", f"line {ed['line']}: self-link on [[{ed['src']}]]"))
+    tids = {t["think_id"] for t in thinks if t["think_id"]}
+    for t in thinks:
+        if t["host"] and t["host"] not in known and slug(t["host"]) not in entities:
+            problems.append((dang, f"line {t['line']}: think on=\"{t['host']}\" references an undeclared node"))
+        for th in t["thens"]:
+            if th not in tids:
+                problems.append(("warning", f"line {t['line']}: then> {th} does not match any think id"))
+    # then> cycles (a think's predecessor chain must be acyclic)
+    nxt = {t["think_id"]: t["thens"] for t in thinks if t["think_id"]}
+    state: dict[str, int] = {}
+    def walk(n: str) -> bool:
+        if state.get(n) == 1: return True
+        if state.get(n) == 2: return False
+        state[n] = 1
+        hit = any(walk(m2) for m2 in nxt.get(n, []) if m2 in nxt)
+        state[n] = 2
+        return hit
+    for n in list(nxt):
+        if walk(n):
+            problems.append(("error", f"then> cycle involving think id {n}"))
+            break
+    return problems
 
 
 def write_pack(out: str, src: str, entities, edges, thinks, *, name: str, owner: str, shard: str):
@@ -157,7 +217,7 @@ def write_pack(out: str, src: str, entities, edges, thinks, *, name: str, owner:
             " VALUES(?,?,?,?,?,?,?,?,?,?)",
             (eid, e["label"], e["type"], None, "", 0,
              json.dumps(e["fields"], ensure_ascii=False), sha, now,
-             "lp_" + hashlib.sha256((shard + "|" + e["label"]).encode()).hexdigest()[:12]))
+             e.get("stable_id")))  # ONLY the authored >>id: is rename-safe; deriving one from the label would defeat it
     for ed in edges:  # edges reference entities by LABEL (v2 identity, SPEC §3.1)
         con.execute("INSERT INTO edges(src, dst, role, kind, commit_sha, time) VALUES(?,?,?,?,?,?)",
                     (ed["src"], ed["dst"], ed["role"], "knowing", sha, now))
@@ -178,18 +238,27 @@ def main() -> int:
     ap.add_argument("-o", "--out", help="output pack path (default: <lmd>.laplaspack)")
     ap.add_argument("--name", help="pack name (default: first # heading or the file name)")
     ap.add_argument("--owner", default="", help="owner string recorded in the manifest")
+    ap.add_argument("--allow-dangling", action="store_true",
+                    help="downgrade dangling node references from errors to warnings")
     a = ap.parse_args()
     src = open(a.lmd, encoding="utf-8").read()
-    entities, edges, thinks = parse(src)
+    entities, edges, thinks, problems = parse(src)
     if not entities:
         print("no [[entities]] found — is this LMD? (see LMD_GRAMMAR.ebnf)", file=sys.stderr)
         return 1
-    # sanity: links must point at declared labels
-    known = {e["label"] for e in entities.values()}
-    for ed in edges:
-        for end in (ed["src"], ed["dst"]):
-            if end not in known:
-                print(f"warning: link references undeclared node [[{end}]]", file=sys.stderr)
+    validate(entities, edges, thinks, problems, allow_dangling=a.allow_dangling)
+    errors = [msg for sev, msg in problems if sev == "error"]
+    for sev, msg in problems:
+        print(f"{sev}: {msg}", file=sys.stderr)
+    if errors:
+        print(f"\n{len(errors)} error(s) — pack NOT built. Fix the source, or pass "
+              f"--allow-dangling to downgrade dangling references.", file=sys.stderr)
+        return 1
+    missing_ids = [e["label"] for e in entities.values() if not e.get("stable_id")]
+    if missing_ids:
+        print(f"note: {len(missing_ids)} node(s) have no >>id: — add authored ids "
+              f"(e.g. >>id: lp_{{12 hex}}) to make renames survive rebuilds (SPEC §3.1). "
+              f"Without one, identity is the label.", file=sys.stderr)
     m = re.search(r"^#\s+(.+)$", src, re.M)
     name = a.name or (m.group(1).strip() if m else a.lmd.rsplit("/", 1)[-1])
     out = a.out or (a.lmd.rsplit(".", 1)[0] + ".laplaspack")

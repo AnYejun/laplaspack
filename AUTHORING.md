@@ -68,6 +68,11 @@ Three rules that matter more than the rest:
    makes `--why` work. A pack without causal links is just notes.
 3. **Quote multi-word hosts**: `on="Full node label"` (unquoted `on=` takes a
    single token).
+4. **Give nodes an authored id** — `>>id: lp_a1c0ffee0001` — and renames survive
+   rebuilds (the id, not the label, is the durable handle). The writer builds
+   without them but will tell you what you're giving up; it also **fails the
+   build** on dangling links, so a rename that misses a link line can't ship a
+   silently broken graph.
 
 See [`examples/demo.lmd`](./examples/demo.lmd) for the source that builds
 [`examples/demo.laplaspack`](./examples/demo.laplaspack).

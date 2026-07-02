@@ -8,7 +8,8 @@
 # `.laplaspack`
 
 **The open format for portable AI memory.**<br>
-One file that holds a mind — typed entities, causal links, human thoughts, and the provenance of how they got there.
+One file that holds a mind — typed entities, causal links, human thoughts, and the provenance of how they got there.<br>
+<sub>Verifiable two ways, both offline: <b>walk</b> the reasoning (<code>--why</code>, stdlib reader) · <b>check</b> the seal (Ed25519, seal tool).</sub>
 
 <p>
   <img src="https://img.shields.io/badge/spec-v3_draft-111111?style=flat-square" alt="spec v3 draft">
@@ -59,6 +60,15 @@ That ordered chain is not a search result — it is the pack's own recorded
 reasoning, walked from the graph. There are also `--todos`, `--entity "…"`, and
 `--json` for piping.
 
+Seal it, and any edit becomes detectable (the one tool here that needs a
+dependency — `pip install cryptography`; stdlib has no Ed25519):
+
+```bash
+python3 laplaspack_seal.py keygen --key me.key
+python3 laplaspack_seal.py sign   examples/demo.laplaspack --key me.key
+python3 laplaspack_seal.py verify examples/demo.laplaspack   # VALID — sealed by 1a2b…
+```
+
 ## Make your own — with an AI, in minutes
 
 Any capable model can compile raw material (your company story, your résumé,
@@ -85,7 +95,13 @@ captured. A `.laplaspack` is compiled **at the moment of writing**: decisions,
 evidence, and links land as a typed graph, so the receipt travels with the fact.
 
 That property — memory that can **show its work, offline, to anyone** — is what
-makes a mind verifiable, and therefore portable.
+makes a mind verifiable, and therefore portable. Concretely, "verifiable" here
+means two checks anyone can run without a service: the **reasoning walk**
+(`--why`: is this claim's recorded ancestry intact?) and the **seal**
+(`laplaspack_seal.py verify`: has the content been touched since it was
+signed?). What's implemented where is tracked honestly in
+[SPEC §8](./SPEC.md#8-implementation-status-reference-tools-in-this-repo) —
+redaction and hub addressing are still spec-ahead-of-tools.
 
 ## Anatomy of a pack
 
@@ -111,7 +127,8 @@ exact source the demo pack was compiled from.
 | [`SPEC.md`](./SPEC.md) | the container spec, **v3 draft** — tables, stable identity, provenance, signing, redaction, conformance levels |
 | [`LMD_GRAMMAR.ebnf`](./LMD_GRAMMAR.ebnf) | the grammar of the canonical source (nodes · properties · 6 causal roles · `@@think@@`) |
 | [`laplaspack_reader.py`](./laplaspack_reader.py) | the **zero-dependency** reference reader (Python stdlib only) |
-| [`laplaspack_writer.py`](./laplaspack_writer.py) | the **zero-dependency** reference writer — compiles LMD → pack |
+| [`laplaspack_writer.py`](./laplaspack_writer.py) | the **zero-dependency** reference writer — compiles LMD → pack, validates the build (dangling refs fail), honors authored `>>id:` |
+| [`laplaspack_seal.py`](./laplaspack_seal.py) | Ed25519 seal — sign · verify · tamper-detect (`pip install cryptography`) |
 | [`AUTHORING.md`](./AUTHORING.md) | **make your own** — with any AI chatbot, with Claude Code, or by hand |
 | [`prompts/`](./prompts) · [`skills/`](./skills) | the copy-paste LMD compiler prompt + a drop-in Claude Code skill |
 | [`HUB.md`](./HUB.md) | draft addressing + transfer semantics (`laplas://publisher/slug` — publish · fetch · grant · mount) |

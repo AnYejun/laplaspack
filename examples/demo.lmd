@@ -3,12 +3,14 @@ A tiny demo mind for the .laplaspack format.
 
 ## Single-origin only
 [[Single-origin only]]
+>>id: lp_a1c0ffee0001
 >>type: decision
 >>what: We buy single-origin beans directly from two farms in Yirgacheffe.
 >>why: Blends hide defects; direct trade doubles the farmer's take.
 
 ## Direct trade doubles farm income
 [[Direct trade doubles farm income]]
+>>id: lp_a1c0ffee0002
 >>type: proof
 >>what: Our 2025 sourcing audit shows farm-gate price at 2.1x the commodity rate.
 
@@ -16,6 +18,7 @@ A tiny demo mind for the .laplaspack format.
 
 ## Own roastery in Mapo
 [[Own roastery in Mapo]]
+>>id: lp_a1c0ffee0003
 >>type: differentiator
 >>what: Roasted in-house in Mapo, Seoul — beans ship within 72 hours of roasting.
 
@@ -23,6 +26,7 @@ A tiny demo mind for the .laplaspack format.
 
 ## Subscription is the core offer
 [[Subscription is the core offer]]
+>>id: lp_a1c0ffee0004
 >>type: offering
 >>what: Biweekly subscription, pause anytime, first bag free.
 
