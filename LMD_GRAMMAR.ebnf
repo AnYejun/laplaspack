@@ -1,0 +1,86 @@
+(* ============================================================================
+   LMD — Laplas Markdown — grammar (draft, aligned to laplas_engine/lmd/parser.py)
+
+   LMD is Markdown-compatible: a plain reader sees headings, lists, and text; an
+   LMD reader additionally recognizes node declarations, typed properties, causal
+   links, and think fences. Whitespace/blank lines separate blocks. Everything
+   not matched below is inert prose and is preserved.
+   ============================================================================ *)
+
+document        = { block } ;
+block           = node | think | loose_edge | prose | blank ;
+
+(* ---- Node: a heading + its declaration + properties ---------------------- *)
+node            = heading , newline ,
+                  declaration , newline ,
+                  { property | link_field } ;
+
+heading         = "## " , text ;                          (* display name *)
+declaration     = "[[" , [ sigil ] , entity_name , "]]" ; (* declares the entity *)
+entity_name     = text - "]]" ;
+sigil           = "!" | "?" | "*" | ">" | "@" | "~" ;      (* optional display glyph *)
+
+(* ---- Property: >>key: value  (value MAY be a ref → becomes an edge) ------ *)
+property        = ">>" , key , ":" , ws , value , newline ;
+key             = ident ;                                  (* e.g. type, rule, what, why *)
+value           = text | ref ;
+ref             = "[[" , [ sigil ] , entity_name , "]]" ;
+
+(* reserved keys with defined meaning *)
+reserved_key    = "type" | "alias" | "aliases" | "aka" | "id" ;
+
+(* ---- Link (edge) --------------------------------------------------------- *)
+link_field      = ">>" , edge_role , ":" , ws , ref , newline ;  (* field form *)
+loose_edge      = ref , ws , arrow , [ "(" , edge_role , ")" ] , ws , ref , newline ;
+arrow           = "→" | "->" | "-->" ;
+
+edge_role       = dag_role | containment_role | ident ;   (* unknown → subject assoc *)
+dag_role        = "derived-from" | "supports" | "raises"
+                | "closes" | "supersedes" | "contradicts" ;   (* the six causal roles *)
+containment_role= "part_of" | "belongs_to" | "subordinate_to" | "aspect_of"
+                | "goal_of" | "milestone_of" | "deliverable_of" | "scope_of"
+                | "has_goal" | "has_milestone" | "has_deliverable" | "has_part"
+                | "contains" | "targets" ;
+(* directed/inverse spellings normalize, e.g. "derived_from"→"derived-from",
+   "raised-by"→"raises". *)
+
+(* ---- Think: a typed, dated thought fenced by @@ … @@ --------------------- *)
+think           = think_open , newline , think_body , newline , think_close ;
+think_open      = "@@" , think_type , { ws , attr } ;
+think_close     = "@@" , { ws } ;                          (* a line that is exactly @@ *)
+think_type      = "question" | "decision" | "todo"
+                | "hypothesis" | "insight" | "note" ;
+attr            = on_attr | by_attr | at_attr | status_attr | due_attr | id_attr | deleted_attr ;
+on_attr         = "on=" , ( quoted | token ) ;            (* host entity *)
+by_attr         = "by=@" , token ;                        (* author *)
+at_attr         = "at=" , iso_datetime ;
+status_attr     = "status=" , token ;                     (* e.g. open, doing, done *)
+due_attr        = "due=" , iso_date ;                     (* todo only *)
+id_attr         = "id=" , token ;                         (* stable think id *)
+deleted_attr    = "deleted=" , ( "true" | "1" | "yes" ) ; (* tombstone *)
+
+think_body      = { body_line } ;
+body_line       = then_line | mention_line | text_line ;
+then_line       = "then> " , token , newline ;            (* human sequence → predecessor *)
+mention_line    = "@[[" , entity_name , "]]" ;            (* soft mention (bracketed) *)
+text_line       = text , newline ;
+
+(* ---- terminals ----------------------------------------------------------- *)
+ident           = letter , { letter | digit | "-" | "_" } ;
+token           = { char - ws } ;
+quoted          = '"' , { char - '"' } , '"' ;
+iso_datetime    = ? ISO-8601 date-time ? ;
+iso_date        = ? ISO-8601 date ? ;
+text            = { char - newline } ;
+ws              = { " " | "\t" } ;
+blank           = newline ;
+newline         = "\n" ;
+prose           = text , newline ;                         (* preserved, inert *)
+
+(* ============================================================================
+   Notes
+   - Entity identity (v2): id = lower(label) with spaces → "_".  (v3: opaque, see SPEC §3.1)
+   - A property whose role is an edge_role AND whose value is a ref becomes an edge.
+   - contradicts is symmetric; other dag_roles are directed.
+   - Thinks are stored raw and folded Last-Writer-Wins by (host,id) on read.
+   ============================================================================ *)

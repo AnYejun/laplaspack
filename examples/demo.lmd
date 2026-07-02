@@ -1,0 +1,37 @@
+# Aurora Coffee — brand memory
+A tiny demo mind for the .laplaspack format.
+
+## Single-origin only
+[[Single-origin only]]
+>>type: decision
+>>what: We buy single-origin beans directly from two farms in Yirgacheffe.
+>>why: Blends hide defects; direct trade doubles the farmer's take.
+
+## Direct trade doubles farm income
+[[Direct trade doubles farm income]]
+>>type: proof
+>>what: Our 2025 sourcing audit shows farm-gate price at 2.1x the commodity rate.
+
+[[Single-origin only]] →(derived-from) [[Direct trade doubles farm income]]
+
+## Own roastery in Mapo
+[[Own roastery in Mapo]]
+>>type: differentiator
+>>what: Roasted in-house in Mapo, Seoul — beans ship within 72 hours of roasting.
+
+[[Own roastery in Mapo]] →(supports) [[Single-origin only]]
+
+## Subscription is the core offer
+[[Subscription is the core offer]]
+>>type: offering
+>>what: Biweekly subscription, pause anytime, first bag free.
+
+[[Subscription is the core offer]] →(derived-from) [[Single-origin only]]
+
+@@decision on=Subscription is the core offer by=founder at=2026-06-01 id=aurora.t1
+Ship the subscription before the retail shelf — recurring beats footfall.
+@@
+
+@@todo on=Own roastery in Mapo by=founder at=2026-06-20 status=open id=aurora.t2
+Book the Q3 cupping session with both Yirgacheffe farms.
+@@
