@@ -69,7 +69,9 @@ Three rules that matter more than the rest:
 3. **Quote multi-word hosts**: `on="Full node label"` (unquoted `on=` takes a
    single token).
 4. **Give nodes an authored id** — `>>id: lp_a1c0ffee0001` — and renames survive
-   rebuilds (the id, not the label, is the durable handle). The writer builds
+   rebuilds (the id, not the label, is the durable handle), and two packs that
+   share ids can be **merged mechanically** (`laplaspack_merge.py`, SPEC §3.9) —
+   this is how team packs become one organizational memory. The writer builds
    without them but will tell you what you're giving up; it also **fails the
    build** on dangling links, so a rename that misses a link line can't ship a
    silently broken graph.

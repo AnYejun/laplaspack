@@ -198,6 +198,62 @@ sees only what the exporter chose to include; there is no hidden channel.
 ships in the desktop client's export path; a reference `redact` tool is
 tracked (see §8).
 
+### 3.9 Merge (declared identity)
+
+Two packs can be combined at three levels; only the last needs a model, and
+declared identity makes it rare:
+
+- **Class 1 — mount.** No merge at all: packs are read side-by-side and
+  provenance keeps them distinct. Always safe; this is what `laplas://` mounting
+  is (HUB.md).
+- **Class 2 — mechanical merge (this section).** When shared entities carry the
+  same authored `stable_id` (§3.1), union-with-unification is a **closed,
+  deterministic, zero-model** operation. Reference:
+  [`laplaspack_merge.py`](./laplaspack_merge.py).
+- **Class 3 — semantic merge.** Entities that are the same *thing* but were
+  never declared so (`[[Deploy policy]]` vs `[[배포 정책]]` with different ids)
+  require an identity judgment — one model pass proposing `stable_id`
+  equivalences, after which the merge is class 2 again. Out of scope for the
+  reference tools; the judgment's output (an alias map) is the same artifact as
+  the v2→v3 migration map (§7).
+
+**Class-2 algorithm (normative).** Given packs A and B:
+
+1. **Identity resolution.** Two entity rows denote the same node iff they share
+   a `stable_id`. Rows without one match only by exact `id` (slug) — and if two
+   id-colliding rows *lack* a common `stable_id`, the merge MUST **fail, writing
+   nothing**, with an error naming both nodes. Identity is declared, never
+   guessed: guessing is exactly the class-3 judgment, and silently unioning two
+   different "Pricing policy" nodes corrupts both minds.
+2. **Entities.** Unified nodes merge per-field. On conflict, the value from the
+   later commit `time` wins (LWW, same rule as thinks §3.5), and the losing
+   value MUST be preserved losslessly in the field map under `_conflicts` as
+   `{value, from, time}` — a merge may pick a winner, but it MUST NOT erase the
+   disagreement. The newer label wins; the older label is kept as an `aka`
+   field so text search still finds it.
+3. **Conflicts as knowledge (optional `materialize` mode).** For claim-bearing
+   fields (`what`, `why`), an implementation MAY additionally materialize the
+   losing claim as a sibling node with a `contradicts` edge to the winner.
+   Disagreement between two minds is itself first-class knowledge — after this,
+   *"where do the teams disagree?"* is a graph query, not an archaeology dig.
+4. **Edges** are set-unioned on `(src, dst, role, kind)` after rewriting
+   renamed labels. **Thinks** are row-unioned raw — §3.5's fold already makes
+   concurrent think histories converge on read, so thinks are CRDT-free by
+   construction.
+5. **Provenance.** All `commits` rows are kept and one new merge commit is
+   appended whose `parents` lists both packs' head shas; the manifest records
+   `merged_from`. A merged pack can answer which mind each fact came from.
+6. **Seal.** A merge produces new content, so it MUST invalidate any §3.7 seal
+   (the reference tool writes the merge unsealed, and says so). The merged pack is re-signed
+   by whoever now vouches for the union — a merger signs the *merge*, not the
+   original testimony.
+
+This is the substrate for a **shared organizational memory**: team packs merge
+mechanically because identity was written down at write-time, disagreements
+surface as `contradicts` structure instead of silent overwrites, and agents
+"communicate" by committing to a shared pack rather than by exchanging
+ephemeral messages.
+
 ---
 
 ## 4. The source format: LMD (Laplas Markdown)
@@ -280,10 +336,10 @@ with only the source + this spec + the grammar.
 
 - Stable-ID migration (v2 slugs → v3 opaque) + the alias-map format.
 - Delta/patch packs (subscribe to another pack's updates) vs full rebuild.
-- **Merge semantics.** Thinks fold deterministically (LWW, §3.5); concurrent
-  edits to *entities/edges* by multiple writers have **no defined merge** yet —
-  today the source is canonical and single-writer-per-shard is assumed. A CRDT
-  or shard-partition rule is required before multi-writer packs.
+- **Merge semantics — the declared-identity case is now DEFINED (§3.9)** and
+  reference-implemented. Still open: the class-3 identity judgment (same thing,
+  never declared — needs an alias-map format, shared with the v2→v3 migration)
+  and N-way / recurring sync (today: fold two-at-a-time; delta packs above).
 - Untrusted-pack safety: a mounted pack's contents enter an LLM context; the
   spec must define an isolation / provenance-labeling contract before packs are
   traded between strangers.
@@ -301,7 +357,8 @@ with only the source + this spec + the grammar.
 | §3.7 sealing | Ed25519 sign/verify, digest v1 | ✅ `laplaspack_seal.py` (needs `cryptography`) |
 | §3.8 redaction | tiered export | 🚧 desktop client only — reference tool tracked |
 | §5 hub | `laplas://` publish/fetch/grant/mount | 📝 draft ([HUB.md](./HUB.md)) |
-| §7 merge | multi-writer entities/edges | 📝 open question |
+| §3.9 merge | declared-identity union, LWW + lossless `_conflicts`, `contradicts` materialization | ✅ `laplaspack_merge.py` |
+| §3.9 class 3 | undeclared-identity judgment (alias map) | 📝 open question |
 
 *This spec is generated from the reference engine (`laplas_engine`) and kept in
 lockstep with it. Discrepancies between this document and the code are bugs in

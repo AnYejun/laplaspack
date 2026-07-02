@@ -69,6 +69,18 @@ python3 laplaspack_seal.py sign   examples/demo.laplaspack --key me.key
 python3 laplaspack_seal.py verify examples/demo.laplaspack   # VALID — sealed by 1a2b…
 ```
 
+And two minds **add**. Packs whose shared nodes declare an authored id
+(`>>id: lp_…`) merge mechanically — no model in the loop; where they disagree,
+the losing claim is kept losslessly and can even become a `contradicts` edge,
+so *"where do our teams disagree?"* turns into a graph query
+([SPEC §3.9](./SPEC.md#39-merge-declared-identity)):
+
+```bash
+python3 laplaspack_merge.py teamA.laplaspack teamB.laplaspack -o org.laplaspack \
+    --conflicts materialize
+python3 laplaspack_reader.py org.laplaspack --why "Deploy policy"   # walks BOTH teams' evidence
+```
+
 ## Make your own — with an AI, in minutes
 
 Any capable model can compile raw material (your company story, your résumé,
@@ -129,6 +141,7 @@ exact source the demo pack was compiled from.
 | [`laplaspack_reader.py`](./laplaspack_reader.py) | the **zero-dependency** reference reader (Python stdlib only) |
 | [`laplaspack_writer.py`](./laplaspack_writer.py) | the **zero-dependency** reference writer — compiles LMD → pack, validates the build (dangling refs fail), honors authored `>>id:` |
 | [`laplaspack_seal.py`](./laplaspack_seal.py) | Ed25519 seal — sign · verify · tamper-detect (`pip install cryptography`) |
+| [`laplaspack_merge.py`](./laplaspack_merge.py) | **zero-dependency** declared-identity merge — union two packs, LWW + lossless conflict record, optional `contradicts` materialization |
 | [`AUTHORING.md`](./AUTHORING.md) | **make your own** — with any AI chatbot, with Claude Code, or by hand |
 | [`prompts/`](./prompts) · [`skills/`](./skills) | the copy-paste LMD compiler prompt + a drop-in Claude Code skill |
 | [`HUB.md`](./HUB.md) | draft addressing + transfer semantics (`laplas://publisher/slug` — publish · fetch · grant · mount) |
