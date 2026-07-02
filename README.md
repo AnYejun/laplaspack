@@ -59,6 +59,24 @@ That ordered chain is not a search result — it is the pack's own recorded
 reasoning, walked from the graph. There are also `--todos`, `--entity "…"`, and
 `--json` for piping.
 
+## Make your own — with an AI, in minutes
+
+Any capable model can compile raw material (your company story, your résumé,
+project notes) into LMD; the stdlib writer turns that into a pack:
+
+```bash
+# 1 · paste prompts/lmd-compiler.md into Claude/ChatGPT/Gemini + your raw text
+# 2 · save the returned LMD, then:
+python3 laplaspack_writer.py story.lmd --owner you --name "My story"
+python3 laplaspack_reader.py story.laplaspack --why "<one of your decisions>"
+```
+
+Claude Code users: `cp -r skills/laplaspack .claude/skills/` and just ask —
+*"make a laplaspack from ./docs"*. Full guide: [`AUTHORING.md`](./AUTHORING.md).
+Packs built this way upload straight into
+[Manifesto](https://laplas-manifesto.vercel.app) and become a live, grounded
+Q&A page.
+
 ## Why write-time structure
 
 Every memory system answers *what*. Almost none can answer ***why*** — because
@@ -93,6 +111,9 @@ exact source the demo pack was compiled from.
 | [`SPEC.md`](./SPEC.md) | the container spec, **v3 draft** — tables, stable identity, provenance, signing, redaction, conformance levels |
 | [`LMD_GRAMMAR.ebnf`](./LMD_GRAMMAR.ebnf) | the grammar of the canonical source (nodes · properties · 6 causal roles · `@@think@@`) |
 | [`laplaspack_reader.py`](./laplaspack_reader.py) | the **zero-dependency** reference reader (Python stdlib only) |
+| [`laplaspack_writer.py`](./laplaspack_writer.py) | the **zero-dependency** reference writer — compiles LMD → pack |
+| [`AUTHORING.md`](./AUTHORING.md) | **make your own** — with any AI chatbot, with Claude Code, or by hand |
+| [`prompts/`](./prompts) · [`skills/`](./skills) | the copy-paste LMD compiler prompt + a drop-in Claude Code skill |
 | [`HUB.md`](./HUB.md) | draft addressing + transfer semantics (`laplas://publisher/slug` — publish · fetch · grant · mount) |
 | [`examples/`](./examples) | the demo pack + the LMD source it was compiled from |
 
