@@ -1,0 +1,108 @@
+<svg viewBox="0 0 980 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="lm-t lm-d" font-family="-apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif">
+<title id="lm-t">The Laplas method — compile edge, isomorph, recall edge</title>
+<desc id="lm-d">Write compiles a raw thought into typed atoms at the compile edge; own holds one .laplaspack where the LMD source and the derived tables are isomorphic; read navigates with typed queries and composes a cited answer at the compose edge, with writes returning through a human approval gate.</desc>
+<defs>
+<marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#9ca3af"/></marker>
+</defs>
+<rect width="980" height="560" fill="#ffffff"/>
+
+<text x="160" y="26" text-anchor="middle" fill="#6b7280" font-size="12">1 · write</text>
+<text x="490" y="26" text-anchor="middle" fill="#6b7280" font-size="12">2 · own — the isomorph</text>
+<text x="820" y="26" text-anchor="middle" fill="#6b7280" font-size="12">3 · read</text>
+
+<rect x="24" y="38" width="272" height="60" rx="8" fill="#fafafa" stroke="#e5e7eb"/>
+<text x="160" y="60" text-anchor="middle" fill="#111111" font-size="12">&#8220;We're going per-Space pricing —</text>
+<text x="160" y="76" text-anchor="middle" fill="#111111" font-size="12">per-seat felt punitive. Sarah flagged it.&#8221;</text>
+<text x="160" y="91" text-anchor="middle" fill="#6b7280" font-size="11">raw thought · chat · doc</text>
+<line x1="160" y1="98" x2="160" y2="118" stroke="#9ca3af" stroke-width="1.4" marker-end="url(#ah)"/>
+
+<rect x="24" y="122" width="272" height="46" rx="8" fill="#111111"/>
+<text x="160" y="141" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="600">compile edge</text>
+<text x="160" y="157" text-anchor="middle" fill="#ffffff" opacity="0.72" font-size="11">LLM as parser · schema as grammar</text>
+<text x="160" y="184" text-anchor="middle" fill="#6b7280" font-size="11">the first of only two places a model interprets</text>
+
+<line x1="160" y1="192" x2="160" y2="210" stroke="#9ca3af" stroke-width="1.4" marker-end="url(#ah)"/>
+<rect x="24" y="214" width="272" height="112" rx="8" fill="#fafafa" stroke="#e5e7eb"/>
+<g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11">
+<text x="40" y="236" fill="#111111">[[* pricing-v2]]  &gt;&gt;id: lp_8f3a</text>
+<text x="40" y="254" fill="#111111">&gt;&gt;type: decision</text>
+<text x="40" y="272" fill="#111111">&gt;&gt;derived-from: [[^ per-seat-punitive]]</text>
+<text x="40" y="290" fill="#111111">&gt;&gt;closes: [[? what-pricing-model]]</text>
+<text x="40" y="308" fill="#6b7280">@@todo on="pricing-v2" … @@</text>
+</g>
+<text x="160" y="346" text-anchor="middle" fill="#6b7280" font-size="11">meaning, split into atoms —</text>
+<text x="160" y="361" text-anchor="middle" fill="#6b7280" font-size="11">typed nodes · properties · causal links · thinks</text>
+
+<line x1="300" y1="270" x2="336" y2="270" stroke="#9ca3af" stroke-width="1.4" marker-end="url(#ah)"/>
+
+<rect x="344" y="38" width="292" height="336" rx="12" fill="#ffffff" stroke="#d1d5db" stroke-width="1.6"/>
+<text x="360" y="58" fill="#6b7280" font-size="11" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">founder-soul.laplaspack — one file, yours</text>
+
+<rect x="360" y="68" width="260" height="66" rx="8" fill="#fafafa" stroke="#e5e7eb"/>
+<text x="490" y="90" text-anchor="middle" fill="#111111" font-size="12" font-weight="600">LMD source — canonical</text>
+<text x="490" y="107" text-anchor="middle" fill="#6b7280" font-size="11">human-readable · git-diffable · signed</text>
+<text x="490" y="123" text-anchor="middle" fill="#6b7280" font-size="11">the atoms on the left, verbatim</text>
+
+<line x1="432" y1="142" x2="432" y2="176" stroke="#9ca3af" stroke-width="1.4" marker-end="url(#ah)"/>
+<line x1="548" y1="176" x2="548" y2="142" stroke="#9ca3af" stroke-width="1.4" marker-end="url(#ah)"/>
+<text x="490" y="166" text-anchor="middle" fill="#111111" font-size="30">≅</text>
+<text x="424" y="160" text-anchor="end" fill="#6b7280" font-size="11">rebuild</text>
+<text x="556" y="160" fill="#6b7280" font-size="11">regenerate</text>
+
+<rect x="360" y="182" width="260" height="94" rx="8" fill="#fafafa" stroke="#e5e7eb"/>
+<text x="490" y="204" text-anchor="middle" fill="#111111" font-size="12" font-weight="600">derived tables — queryable</text>
+<g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11">
+<text x="490" y="223" text-anchor="middle" fill="#111111">entities · edges · thinks</text>
+<text x="490" y="240" text-anchor="middle" fill="#111111">fts5 (bm25) · sparse postings</text>
+</g>
+<text x="490" y="262" text-anchor="middle" fill="#6b7280" font-size="11">rebuilt from source on any version bump</text>
+<text x="490" y="300" text-anchor="middle" fill="#6b7280" font-size="11" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">pack(parse(lmd)).hydrate() ≅ graph(parse(lmd))</text>
+<text x="490" y="316" text-anchor="middle" fill="#6b7280" font-size="11">two faces, one memory — spec §5, enforced by a golden corpus</text>
+
+<g fill="#ffffff" stroke="#e5e7eb">
+<rect x="352" y="336" width="66" height="24" rx="12"/>
+<rect x="424" y="336" width="72" height="24" rx="12"/>
+<rect x="502" y="336" width="94" height="24" rx="12"/>
+</g>
+<text x="385" y="352" text-anchor="middle" fill="#6b7280" font-size="11">ed25519</text>
+<text x="460" y="352" text-anchor="middle" fill="#6b7280" font-size="11">format v3</text>
+<text x="549" y="352" text-anchor="middle" fill="#6b7280" font-size="11">readable ≥ 2035</text>
+
+<line x1="640" y1="270" x2="676" y2="270" stroke="#9ca3af" stroke-width="1.4" marker-end="url(#ah)"/>
+
+<rect x="684" y="38" width="272" height="106" rx="8" fill="#fafafa" stroke="#e5e7eb"/>
+<text x="700" y="60" fill="#111111" font-size="12" font-weight="600">typed query surface</text>
+<g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" fill="#111111">
+<text x="700" y="79">find("pricing", k=6)</text>
+<text x="700" y="96">match(type="decision")</text>
+<text x="700" y="113">expand · recall_why("lp_8f3a")</text>
+</g>
+<text x="700" y="132" fill="#6b7280" font-size="11">deterministic — same pack, same cards</text>
+<line x1="820" y1="144" x2="820" y2="162" stroke="#9ca3af" stroke-width="1.4" marker-end="url(#ah)"/>
+
+<rect x="684" y="166" width="272" height="46" rx="8" fill="#fafafa" stroke="#e5e7eb"/>
+<text x="820" y="185" text-anchor="middle" fill="#111111" font-size="12">cards — id · label · type · provenance</text>
+<text x="820" y="202" text-anchor="middle" fill="#6b7280" font-size="11">a budgeted briefing, never a dump</text>
+<line x1="820" y1="212" x2="820" y2="230" stroke="#9ca3af" stroke-width="1.4" marker-end="url(#ah)"/>
+
+<rect x="684" y="234" width="272" height="46" rx="8" fill="#111111"/>
+<text x="820" y="253" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="600">compose edge</text>
+<text x="820" y="269" text-anchor="middle" fill="#ffffff" opacity="0.72" font-size="11">LLM writes prose, citing node ids</text>
+<text x="820" y="296" text-anchor="middle" fill="#6b7280" font-size="11">…and that is the last time a model touches it</text>
+
+<line x1="820" y1="304" x2="820" y2="322" stroke="#9ca3af" stroke-width="1.4" marker-end="url(#ah)"/>
+<rect x="684" y="326" width="272" height="48" rx="8" fill="#fafafa" stroke="#e5e7eb"/>
+<text x="820" y="346" text-anchor="middle" fill="#111111" font-size="12" font-weight="600">grounded answer</text>
+<text x="820" y="363" text-anchor="middle" fill="#6b7280" font-size="11" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">6 cited · of 10 explored · receipts kept</text>
+
+<path d="M820 374 L820 428 L664 428" fill="none" stroke="#9ca3af" stroke-width="1.4" stroke-dasharray="4 4"/>
+<rect x="428" y="406" width="236" height="44" rx="8" fill="#fafafa" stroke="#e5e7eb"/>
+<text x="546" y="424" text-anchor="middle" fill="#111111" font-size="12" font-weight="600">approvals — a human holds the gate</text>
+<text x="546" y="440" text-anchor="middle" fill="#6b7280" font-size="11" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">propose_commit → approve → commit</text>
+<path d="M428 428 L400 428 L400 380" fill="none" stroke="#9ca3af" stroke-width="1.4" stroke-dasharray="4 4" marker-end="url(#ah)"/>
+<text x="392" y="404" text-anchor="end" fill="#6b7280" font-size="11">memory, richer</text>
+
+<line x1="24" y1="486" x2="956" y2="486" stroke="#e5e7eb"/>
+<text x="490" y="512" text-anchor="middle" fill="#6b7280" font-size="12">read-time RAG puts a model inside retrieval — laplas puts models only at the two edges.</text>
+<text x="490" y="530" text-anchor="middle" fill="#111111" font-size="12" font-weight="600">the middle is deterministic, verifiable, and a file you own.</text>
+</svg>
