@@ -136,6 +136,7 @@ exact source the demo pack was compiled from.
 
 | File | What |
 |---|---|
+| [`METHOD.md`](./METHOD.md) | **start here** — the short technical report: compile edge → isomorph → recall, with the system figure |
 | [`SPEC.md`](./SPEC.md) | the container spec, **v3 draft** — tables, stable identity, provenance, signing, redaction, conformance levels |
 | [`VERSIONING.md`](./VERSIONING.md) | the **compatibility pledge** — every future reader reads every past pack; how the format may change; golden-corpus enforcement |
 | [`RECALL.md`](./RECALL.md) | the **query surface** — the typed operator contract (`find` · `match` · `expand` · `recall_why` · thinks). A pack is a file *plus* recall, the way SQLite is a file *plus* SQL |
