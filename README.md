@@ -137,6 +137,8 @@ exact source the demo pack was compiled from.
 | File | What |
 |---|---|
 | [`SPEC.md`](./SPEC.md) | the container spec, **v3 draft** — tables, stable identity, provenance, signing, redaction, conformance levels |
+| [`VERSIONING.md`](./VERSIONING.md) | the **compatibility pledge** — every future reader reads every past pack; how the format may change; golden-corpus enforcement |
+| [`RECALL.md`](./RECALL.md) | the **query surface** — the typed operator contract (`find` · `match` · `expand` · `recall_why` · thinks). A pack is a file *plus* recall, the way SQLite is a file *plus* SQL |
 | [`LMD_GRAMMAR.ebnf`](./LMD_GRAMMAR.ebnf) | the grammar of the canonical source (nodes · properties · 6 causal roles · `@@think@@`) |
 | [`laplaspack_reader.py`](./laplaspack_reader.py) | the **zero-dependency** reference reader (Python stdlib only) |
 | [`laplaspack_writer.py`](./laplaspack_writer.py) | the **zero-dependency** reference writer — compiles LMD → pack, validates the build (dangling refs fail), honors authored `>>id:` |
