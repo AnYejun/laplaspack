@@ -93,25 +93,23 @@
 <text x="810" y="64" text-anchor="middle" fill="#111111" font-size="12" font-family="ui-monospace, Menlo, monospace">find("pricing", k)</text>
 <line x1="810" y1="74" x2="810" y2="96" stroke="#6b7280" stroke-width="1.4" marker-end="url(#a2)"/>
 
-<path d="M760 112 Q680 130 646 380" fill="none" stroke="#6b7280" stroke-width="1.2" marker-end="url(#a2)"/>
-<circle cx="700" cy="150" r="9" fill="#ffffff" stroke="#111111"/>
-<text x="700" y="154" text-anchor="middle" fill="#111111" font-size="11">1</text>
-<text x="712" y="154" fill="#6b7280" font-size="11" font-family="ui-monospace, Menlo, monospace">match · bm25</text>
+<path d="M750 142 Q700 146 650 144" fill="none" stroke="#6b7280" stroke-width="1.2" marker-end="url(#a2)"/>
+<path d="M750 161 Q700 200 650 248" fill="none" stroke="#6b7280" stroke-width="1.2" marker-end="url(#a2)"/>
+<path d="M750 180 Q685 255 652 374" fill="none" stroke="#6b7280" stroke-width="1.2" marker-end="url(#a2)"/>
 
-<path d="M756 122 Q700 128 646 143" fill="none" stroke="#6b7280" stroke-width="1.2" marker-end="url(#a2)"/>
-<circle cx="692" cy="120" r="9" fill="#ffffff" stroke="#111111"/>
-<text x="692" y="124" text-anchor="middle" fill="#111111" font-size="11">2</text>
-<text x="704" y="112" fill="#6b7280" font-size="11" font-family="ui-monospace, Menlo, monospace">select id in {…}</text>
+<rect x="750" y="104" width="100" height="96" rx="8" fill="#fafafa" stroke="#d1d5db"/>
+<text x="800" y="124" text-anchor="middle" fill="#111111" font-size="12" font-family="ui-monospace, Menlo, monospace">engine</text>
+<circle cx="768" cy="142" r="7" fill="#ffffff" stroke="#111111"/>
+<text x="768" y="145" text-anchor="middle" fill="#111111" font-size="9">2</text>
+<text x="781" y="145" fill="#6b7280" font-size="10" font-family="ui-monospace, Menlo, monospace">select id</text>
+<circle cx="768" cy="161" r="7" fill="#ffffff" stroke="#111111"/>
+<text x="768" y="164" text-anchor="middle" fill="#111111" font-size="9">3</text>
+<text x="781" y="164" fill="#6b7280" font-size="10" font-family="ui-monospace, Menlo, monospace">walk edges</text>
+<circle cx="768" cy="180" r="7" fill="#ffffff" stroke="#111111"/>
+<text x="768" y="183" text-anchor="middle" fill="#111111" font-size="9">1</text>
+<text x="781" y="183" fill="#6b7280" font-size="10" font-family="ui-monospace, Menlo, monospace">match·bm25</text>
 
-<path d="M770 170 Q706 200 646 252" fill="none" stroke="#6b7280" stroke-width="1.2" marker-end="url(#a2)"/>
-<circle cx="722" cy="196" r="9" fill="#ffffff" stroke="#111111"/>
-<text x="722" y="200" text-anchor="middle" fill="#111111" font-size="11">3</text>
-<text x="734" y="200" fill="#6b7280" font-size="11" font-family="ui-monospace, Menlo, monospace">walk src=lp_8f</text>
-
-<rect x="756" y="104" width="80" height="80" rx="8" fill="#fafafa" stroke="#d1d5db"/>
-<text x="796" y="148" text-anchor="middle" fill="#111111" font-size="12" font-family="ui-monospace, Menlo, monospace">engine</text>
-
-<line x1="836" y1="144" x2="866" y2="144" stroke="#6b7280" stroke-width="1.4" marker-end="url(#a2)"/>
+<line x1="850" y1="144" x2="862" y2="144" stroke="#6b7280" stroke-width="1.4" marker-end="url(#a2)"/>
 
 <rect x="880" y="120" width="82" height="46" rx="6" fill="#fafafa" stroke="#e5e7eb"/>
 <rect x="874" y="126" width="82" height="46" rx="6" fill="#fafafa" stroke="#e5e7eb"/>
