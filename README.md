@@ -112,6 +112,12 @@ python3 laplaspack_writer.py story.lmd --owner you --name "My story"
 python3 laplaspack_reader.py story.laplaspack --why "<one of your decisions>"
 ```
 
+No raw material yet? Use the **interview**:
+[`prompts/manifesto-interview.md`](./prompts/manifesto-interview.md) turns the
+model into an interviewer that pulls your company's story out one question at
+a time — specific claims, attached evidence — then compiles and builds the
+pack for [Manifesto](https://laplas-manifesto.vercel.app).
+
 Claude Code users: `cp -r skills/laplaspack .claude/skills/` and just ask —
 *"make a laplaspack from ./docs"*. Full guide: [`AUTHORING.md`](./AUTHORING.md).
 Packs built this way upload straight into

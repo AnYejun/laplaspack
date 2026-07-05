@@ -5,6 +5,10 @@ that answers `--why` offline.
 
 ## 1 · With any AI chatbot (2 minutes)
 
+> No material written down yet? Start from the **interview** instead:
+> [`prompts/manifesto-interview.md`](./prompts/manifesto-interview.md) — the
+> model asks, you answer, the pack compiles itself.
+
 1. Open [`prompts/lmd-compiler.md`](./prompts/lmd-compiler.md) and copy the
    prompt block into Claude / ChatGPT / Gemini.
 2. Paste your raw material as the next message — a company story, your résumé,
