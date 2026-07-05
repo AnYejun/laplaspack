@@ -1,0 +1,130 @@
+# Choi Lab — a research lab's canon (starter kit)
+A living example of the LAB SCHEMA: hypothesis · experiment · result · protocol ·
+dataset · paper · member · grant, wired with causal edges. Replace the contents
+with your lab's — the shapes are the kit.
+
+## Prof. Choi
+[[Prof. Choi]]
+>>id: lp_lab00000001
+>>type: member
+>>role: PI — continual learning & memory systems
+>>email: choi@lab.example
+
+## Sujin Park
+[[Sujin Park]]
+>>id: lp_lab00000002
+>>type: member
+>>role: PhD student — replay methods
+>>joined: 2024
+
+## Jaehyun Lee
+[[Jaehyun Lee]]
+>>id: lp_lab00000003
+>>type: member
+>>role: MS student — training infra
+>>joined: 2026
+
+## NRF Memory Systems Grant
+[[NRF Memory Systems Grant]]
+>>id: lp_lab00000004
+>>type: grant
+>>period: 2025–2028
+>>scope: continual learning under bounded memory
+
+## Continual-Bench v2
+[[Continual-Bench v2]]
+>>id: lp_lab00000005
+>>type: dataset
+>>what: 6-task class-incremental suite the lab evaluates every method on
+>>location: nas://datasets/continual-bench-v2
+
+## Eval Protocol v2
+[[Eval Protocol v2]]
+>>id: lp_lab00000006
+>>type: protocol
+>>what: 3 seeds · fixed task order · report mean forgetting + final accuracy
+>>why: single-seed reports burned us in 2024 — variance swallowed the effect
+
+## Replay prevents forgetting
+[[Replay prevents forgetting]]
+>>id: lp_lab00000007
+>>type: hypothesis
+>>claim: small-batch replay is sufficient to prevent catastrophic forgetting
+>>status: revised — holds only below ~10k classes
+
+## EXP-041 replay on Continual-Bench
+[[EXP-041 replay on Continual-Bench]]
+>>id: lp_lab00000008
+>>type: experiment
+>>ran: 2025-11
+>>config: replay buffer 2%, 3 seeds
+>>tests: [[Replay prevents forgetting]]
+>>uses: [[Eval Protocol v2]] · [[Continual-Bench v2]]
+>>run_by: [[Sujin Park]]
+
+
+
+## Result: replay holds at small scale
+[[Result: replay holds at small scale]]
+>>id: lp_lab00000009
+>>type: result
+>>finding: forgetting < 3% up to 1k classes
+>>supports: [[Replay prevents forgetting]]
+
+[[Result: replay holds at small scale]] →(derived-from) [[EXP-041 replay on Continual-Bench]]
+[[Result: replay holds at small scale]] →(supports) [[Replay prevents forgetting]]
+
+## EXP-047 replay at 10k classes
+[[EXP-047 replay at 10k classes]]
+>>id: lp_lab00000010
+>>type: experiment
+>>ran: 2026-02
+>>config: same protocol, scaled to 10k classes
+>>tests: [[Replay prevents forgetting]]
+>>uses: [[Eval Protocol v2]] · [[Continual-Bench v2]]
+>>run_by: [[Sujin Park]]
+
+
+
+## Result: replay plateaus above 10k
+[[Result: replay plateaus above 10k]]
+>>id: lp_lab00000011
+>>type: result
+>>finding: forgetting climbs to 18% at 10k classes regardless of buffer size
+>>contradicts: [[Replay prevents forgetting]]
+
+[[Result: replay plateaus above 10k]] →(derived-from) [[EXP-047 replay at 10k classes]]
+[[Result: replay plateaus above 10k]] →(contradicts) [[Replay prevents forgetting]]
+[[Result: replay plateaus above 10k]] →(raises) [[Why does replay plateau?]]
+
+## Why does replay plateau?
+[[Why does replay plateau?]]
+>>id: lp_lab00000012
+>>type: question
+>>status: open
+
+## Pivot to sparse replay
+[[Pivot to sparse replay]]
+>>id: lp_lab00000013
+>>type: decision
+>>part_of: [[NRF Memory Systems Grant]]
+>>rationale: uniform buffers waste capacity on easy classes; sparsity targets the tail
+>>date: 2026-03
+
+## Paper: Replay at Scale (2026)
+[[Paper: Replay at Scale (2026)]]
+>>id: lp_lab00000014
+>>type: paper
+>>venue: submitted — CoLLAs 2026
+>>authors: [[Sujin Park]] · [[Prof. Choi]]
+
+[[Pivot to sparse replay]] →(derived-from) [[Result: replay plateaus above 10k]]
+[[Paper: Replay at Scale (2026)]] →(derived-from) [[Result: replay plateaus above 10k]]
+
+@@todo on="Pivot to sparse replay" by=sujin at=2026-07-01 status=doing id=lab.t1
+run sparse-replay ablation on Continual-Bench v2 — blocking the camera-ready
+@@
+
+@@question on="Why does replay plateau?" by=choi at=2026-06-20 status=open id=lab.t2
+is the plateau a capacity effect or an interference effect? design a probe
+@@

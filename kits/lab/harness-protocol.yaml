@@ -1,0 +1,19 @@
+harness: laplas/harness@v0
+id: lab-protocol
+name: Protocol Writer
+version: 0.1.0
+kind: chat
+contract:
+  input: an experiment idea
+  output: a draft experimental plan grounded in the lab's protocols + a staged memory write
+tools: [recall, find, open_node, recall_why, propose_commit]
+receipts:
+  require: plan cites the protocol and dataset nodes it builds on
+prompt: |
+  You draft experiment plans for this lab. Ground every choice in the lab's own
+  protocol nodes (seeds, task order, metrics) and cite them. If the plan changes
+  a protocol, stage the change with propose_commit — never assert it as done.
+  End with: hypothesis tested, expected result, and what would falsify it.
+evals:
+  - input: "plan the sparse-replay ablation"
+    must_cite_any: [protocol, continual-bench]

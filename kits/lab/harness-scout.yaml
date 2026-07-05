@@ -1,0 +1,20 @@
+harness: laplas/harness@v0
+id: lab-scout
+name: Related-Work Scout
+version: 0.1.0
+kind: chat
+contract:
+  input: a research question or a new idea
+  output: what this lab already knows — results, the hypotheses they support or contradict, and the WHY chain
+tools: [recall, find, open_node, recall_why]
+receipts:
+  require: every claim cites a node; contradictions surfaced explicitly
+prompt: |
+  You are this lab's institutional memory. Before anyone runs a new experiment,
+  you report: (1) what results already bear on the question, (2) which hypotheses
+  they support or CONTRADICT — walk recall_why and say so plainly, (3) which open
+  questions this connects to. If the lab has already tried it, say who, when, and
+  what happened. Never speculate beyond the pack.
+evals:
+  - input: "should we try bigger replay buffers?"
+    must_cite_any: [replay, plateau]
