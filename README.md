@@ -140,7 +140,7 @@ redaction and hub addressing are still spec-ahead-of-tools.
 demo.lmd  ──(compile)──▶  demo.laplaspack        one SQLite file
 ─────────────────────────────────────────────────────────────────
 [[Node]] + >>properties        entities           typed nodes
-→(derived-from) links          edges              6 causal roles
+→(role) links                  edges              6 causal roles + free relations
 @@think … @@ documents         thinks             LWW-folded thoughts
                                commits            build provenance
                                lmd_source         the canonical text, embedded
@@ -159,7 +159,7 @@ exact source the demo pack was compiled from.
 | [`SPEC.md`](./SPEC.md) | the container spec, **v3 draft** — tables, stable identity, provenance, signing, redaction, conformance levels |
 | [`VERSIONING.md`](./VERSIONING.md) | the **compatibility pledge** — every future reader reads every past pack; how the format may change; golden-corpus enforcement |
 | [`RECALL.md`](./RECALL.md) | the **query surface** — the typed operator contract (`find` · `match` · `expand` · `recall_why` · thinks). A pack is a file *plus* recall, the way SQLite is a file *plus* SQL |
-| [`LMD_GRAMMAR.ebnf`](./LMD_GRAMMAR.ebnf) | the grammar of the canonical source (nodes · properties · 6 causal roles · `@@think@@`) |
+| [`LMD_GRAMMAR.ebnf`](./LMD_GRAMMAR.ebnf) | the grammar of the canonical source (nodes · properties · links: 6 causal roles + free relation roles · `@@think@@`) |
 | [`laplaspack_reader.py`](./laplaspack_reader.py) | the **zero-dependency** reference reader (Python stdlib only) |
 | [`laplaspack_writer.py`](./laplaspack_writer.py) | the **zero-dependency** reference writer — compiles LMD → pack, validates the build (dangling refs fail), honors authored `>>id:` |
 | [`laplaspack_seal.py`](./laplaspack_seal.py) | Ed25519 seal — sign · verify · tamper-detect (`pip install cryptography`) |

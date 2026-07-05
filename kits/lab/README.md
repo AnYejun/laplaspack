@@ -33,7 +33,10 @@ Ask: *"why did we pivot to sparse replay?"* — the answer walks
 
 **Make it YOURS:** replace the contents of `lab-canon.lmd` with your lab's
 hypotheses and results (keep the causal arrows — they are the why), then
-`python3 laplaspack_writer.py your-lab.lmd`. Conventions: domain relations
-(`>>tests:` `>>uses:` `>>run_by:`) are fields; **causality uses the six roles**
-(`derived-from` · `supports` · `contradicts` · `raises` · `closes` · `supersedes`).
-Types are yours to invent; causality is the standard.
+`python3 laplaspack_writer.py your-lab.lmd`. Conventions: **causality uses the
+six roles** (`derived-from` · `supports` · `contradicts` · `raises` · `closes` ·
+`supersedes`); domain relations are arrows with any kebab-case role
+(`→(tests)` `→(uses)` `→(run-by)` `→(authored-by)`); membership is the
+containment field `>>part_of: [[Choi Lab]]`. Scalars (`>>ran:` `>>config:`)
+stay properties. Types are yours to invent; causality is the standard —
+and **no node floats**: the writer warns on orphans.

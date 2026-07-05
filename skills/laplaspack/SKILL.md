@@ -24,13 +24,22 @@ mechanical work; your job is the **compilation** — raw prose → LMD.
 
 3. **Compile to LMD** — write `<name>.lmd` following the grammar in
    `prompts/lmd-compiler.md` (same repo). The non-negotiables:
-   - 6–16 nodes, short claim-like labels, one idea per node
-   - `>>type:` on every node · `>>what:` = one dense sentence · facts ONLY from the source
-   - causal links (`→(derived-from)` etc.) wherever the source implies WHY
+   - **The three shapes**: NODE = a noun phrase naming a thing you can point at ·
+     PROPERTY = a scalar fact written ON its node (`>>born: 2011-03-02`) ·
+     LINK = a relation between two nodes (`[[A]] →(child-of) [[B]]`).
+     If a label reads as a sentence about another node, it is a property or a
+     link — never a node.
+   - 5–16 nodes · `>>type:` on every node · `>>what:` = one sentence of essence
+     that never restates properties/links · facts ONLY from the source
+   - causal links (`→(derived-from)` etc., the six roles) wherever the source
+     implies WHY; free kebab-case roles (`plays-for`, `works-at`, `uses` …) for
+     domain relations. `>>father: [[X]]`-style fields do NOT create links —
+     only arrows and edge-role fields (part_of, has_goal, the causal six) do.
+   - **no orphans** — every node links to at least one other; the pack's
+     subject is the hub
    - source language preserved; non-English labels get an English gloss in parens
    - `@@decision/todo/question on="Full Label" by=<user> at=<today> … @@` for
      thoughts; ALWAYS quote `on=`
-   - decisions link to their evidence: `[[Decision]] →(derived-from) [[Proof]]`
 
 4. **Build the pack:**
    ```bash
@@ -45,6 +54,9 @@ mechanical work; your job is the **compilation** — raw prose → LMD.
    ```
    The `--why` chain must walk real ancestors. If it comes back empty, you
    under-linked — go back to step 3 and add the causal edges the source implies.
+   The writer's warnings are part of the contract: an **orphan-node warning
+   means the compile failed in spirit** — go back and link (or fold the orphan
+   into a parent node as properties) until the build is warning-clean.
 
 6. **Hand over** both files (`.lmd` = the editable source of truth,
    `.laplaspack` = the built artifact) and mention: the pack can be uploaded to

@@ -63,7 +63,12 @@ Book the Q3 cupping session with both farms.
 
 Three rules that matter more than the rest:
 
-1. **One idea per node**, labels short and claim-like.
+1. **The three shapes.** A NODE is a noun phrase naming a thing you can point
+   at; a scalar fact is a **`>>property:` on its node** (`>>born: 2011-03-02`);
+   a relation is a **link** (`[[A]] →(child-of) [[B]]` — any kebab-case role,
+   the causal six power `--why`). If a label reads as a sentence about another
+   node ("height 166cm"), it's a property or a link, never a node. No orphans:
+   every node connects; the writer warns when one doesn't.
 2. **Link the WHY** — `→(derived-from)` from a decision to its evidence is what
    makes `--why` work. A pack without causal links is just notes.
 3. **Quote multi-word hosts**: `on="Full node label"` (unquoted `on=` takes a

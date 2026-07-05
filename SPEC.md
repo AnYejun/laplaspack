@@ -277,16 +277,20 @@ A `## Heading` names a node; the `[[Heading]]` line declares it as an entity;
 
 ### 4.2 Property
 
-`>>key: value` — one property. Value is free text; `>>key: [[Ref]]` makes the
-value an edge to `Ref` (with `key` as the role if `key` is an edge role, §3.3).
+`>>key: value` — one property. Value is free text. `>>key: [[Ref]]` becomes an
+edge to `Ref` **only when `key` is an edge role** (a causal role or containment
+form, §3.3/§4.3); for any other key the ref stays plain text — a relation like
+`father` or `plays-for` must be authored as an arrow line. Conformant writers
+SHOULD warn when a non-edge-role field holds a ref: that silent demotion is
+how graphs go missing.
 
 ### 4.3 Link (edge)
 
-- Field form: `>>derived-from: [[LLMs are amnesiac]]`
-- Arrow form: `[[A]] →(supersedes) [[B]]`
-
-Roles: the six causal roles (§3.3) + containment forms. Unknown roles are
-retained as `subject`-kind associations.
+- Field form: `>>derived-from: [[LLMs are amnesiac]]` — **edge-role keys only**
+  (the six causal roles + containment forms)
+- Arrow form: `[[A]] →(supersedes) [[B]]` — **any role**; the six causal roles
+  are `knowing`-kind, everything else is retained as a `subject`-kind
+  association (`plays-for`, `uses`, `run-by`, …)
 
 ### 4.4 Think
 

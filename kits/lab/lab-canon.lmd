@@ -3,12 +3,19 @@ A living example of the LAB SCHEMA: hypothesis · experiment · result · protoc
 dataset · paper · member · grant, wired with causal edges. Replace the contents
 with your lab's — the shapes are the kit.
 
+## Choi Lab
+[[Choi Lab]]
+>>id: lp_lab00000000
+>>type: lab
+>>what: continual-learning & memory-systems lab — this canon is its shared memory
+
 ## Prof. Choi
 [[Prof. Choi]]
 >>id: lp_lab00000001
 >>type: member
 >>role: PI — continual learning & memory systems
 >>email: choi@lab.example
+>>part_of: [[Choi Lab]]
 
 ## Sujin Park
 [[Sujin Park]]
@@ -16,6 +23,7 @@ with your lab's — the shapes are the kit.
 >>type: member
 >>role: PhD student — replay methods
 >>joined: 2024
+>>part_of: [[Choi Lab]]
 
 ## Jaehyun Lee
 [[Jaehyun Lee]]
@@ -23,6 +31,7 @@ with your lab's — the shapes are the kit.
 >>type: member
 >>role: MS student — training infra
 >>joined: 2026
+>>part_of: [[Choi Lab]]
 
 ## NRF Memory Systems Grant
 [[NRF Memory Systems Grant]]
@@ -30,6 +39,8 @@ with your lab's — the shapes are the kit.
 >>type: grant
 >>period: 2025–2028
 >>scope: continual learning under bounded memory
+
+[[NRF Memory Systems Grant]] →(funds) [[Choi Lab]]
 
 ## Continual-Bench v2
 [[Continual-Bench v2]]
@@ -58,9 +69,11 @@ with your lab's — the shapes are the kit.
 >>type: experiment
 >>ran: 2025-11
 >>config: replay buffer 2%, 3 seeds
->>tests: [[Replay prevents forgetting]]
->>uses: [[Eval Protocol v2]] · [[Continual-Bench v2]]
->>run_by: [[Sujin Park]]
+
+[[EXP-041 replay on Continual-Bench]] →(tests) [[Replay prevents forgetting]]
+[[EXP-041 replay on Continual-Bench]] →(uses) [[Eval Protocol v2]]
+[[EXP-041 replay on Continual-Bench]] →(uses) [[Continual-Bench v2]]
+[[EXP-041 replay on Continual-Bench]] →(run-by) [[Sujin Park]]
 
 
 
@@ -80,9 +93,11 @@ with your lab's — the shapes are the kit.
 >>type: experiment
 >>ran: 2026-02
 >>config: same protocol, scaled to 10k classes
->>tests: [[Replay prevents forgetting]]
->>uses: [[Eval Protocol v2]] · [[Continual-Bench v2]]
->>run_by: [[Sujin Park]]
+
+[[EXP-047 replay at 10k classes]] →(tests) [[Replay prevents forgetting]]
+[[EXP-047 replay at 10k classes]] →(uses) [[Eval Protocol v2]]
+[[EXP-047 replay at 10k classes]] →(uses) [[Continual-Bench v2]]
+[[EXP-047 replay at 10k classes]] →(run-by) [[Sujin Park]]
 
 
 
@@ -116,10 +131,11 @@ with your lab's — the shapes are the kit.
 >>id: lp_lab00000014
 >>type: paper
 >>venue: submitted — CoLLAs 2026
->>authors: [[Sujin Park]] · [[Prof. Choi]]
 
 [[Pivot to sparse replay]] →(derived-from) [[Result: replay plateaus above 10k]]
 [[Paper: Replay at Scale (2026)]] →(derived-from) [[Result: replay plateaus above 10k]]
+[[Paper: Replay at Scale (2026)]] →(authored-by) [[Sujin Park]]
+[[Paper: Replay at Scale (2026)]] →(authored-by) [[Prof. Choi]]
 
 @@todo on="Pivot to sparse replay" by=sujin at=2026-07-01 status=doing id=lab.t1
 run sparse-replay ablation on Continual-Bench v2 — blocking the camera-ready
