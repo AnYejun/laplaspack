@@ -81,6 +81,25 @@ python3 laplaspack_merge.py teamA.laplaspack teamB.laplaspack -o org.laplaspack 
 python3 laplaspack_reader.py org.laplaspack --why "Deploy policy"   # walks BOTH teams' evidence
 ```
 
+## Mount a pack into any MCP client
+
+A pack someone handed you becomes a live, queryable memory inside Claude,
+Cursor, or any other MCP client — one config line, zero dependencies, no
+account, nothing leaves your machine
+([`laplaspack_mcp.py`](./laplaspack_mcp.py)):
+
+```json
+{ "mcpServers": { "my-pack": {
+    "command": "python3",
+    "args": ["/path/to/laplaspack_mcp.py", "/path/to/mind.laplaspack"] } } }
+```
+
+The client gets five read-only tools: `find` (full-text over atoms), `open`
+(one atom's properties + typed links + thoughts), `directory` (the map of the
+mind), `why` (the recorded reasoning chain), and `blind_spots` — unclosed
+loops in the typed graph (exact $H_1$): what this memory *doesn't know it's
+missing*. Mount several packs at once by passing several paths.
+
 ## Make your own — with an AI, in minutes
 
 Any capable model can compile raw material (your company story, your résumé,
@@ -145,6 +164,7 @@ exact source the demo pack was compiled from.
 | [`laplaspack_writer.py`](./laplaspack_writer.py) | the **zero-dependency** reference writer — compiles LMD → pack, validates the build (dangling refs fail), honors authored `>>id:` |
 | [`laplaspack_seal.py`](./laplaspack_seal.py) | Ed25519 seal — sign · verify · tamper-detect (`pip install cryptography`) |
 | [`laplaspack_merge.py`](./laplaspack_merge.py) | **zero-dependency** declared-identity merge — union two packs, LWW + lossless conflict record, optional `contradicts` materialization |
+| [`laplaspack_mcp.py`](./laplaspack_mcp.py) | **zero-dependency** MCP server — mount any pack into any MCP client (`find` · `open` · `directory` · `why` · `blind_spots`) |
 | [`AUTHORING.md`](./AUTHORING.md) | **make your own** — with any AI chatbot, with Claude Code, or by hand |
 | [`prompts/`](./prompts) · [`skills/`](./skills) | the copy-paste LMD compiler prompt + a drop-in Claude Code skill |
 | [`HUB.md`](./HUB.md) | draft addressing + transfer semantics (`laplas://publisher/slug` — publish · fetch · grant · mount) |
