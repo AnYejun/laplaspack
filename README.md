@@ -20,6 +20,8 @@ One file that holds a mind — typed entities, causal links, human thoughts, and
 
 <sub>an <b>◈ ISOMORPH</b> project — the format under <a href="https://laplas-landing.vercel.app">LAPLAS</a> and <a href="https://laplas-manifesto.vercel.app">Manifesto</a></sub>
 
+<sub>🇰🇷 <b>팩을 만들러 오셨나요?</b> 한국어 제작 가이드 → <a href="./README.ko.md"><b>README.ko.md</b></a></sub>
+
 </div>
 
 <br>
