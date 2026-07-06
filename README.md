@@ -9,7 +9,8 @@
 
 **The open format for editable, portable AI memory.**<br>
 One file that holds a mind — typed entities, causal links, human thoughts, and the provenance of how they got there.<br>
-<sub>Verifiable two ways, both offline: <b>walk</b> the reasoning (<code>--why</code>, stdlib reader) · <b>check</b> the seal (Ed25519, seal tool).</sub>
+<sub>Verifiable two ways, both offline: <b>walk</b> the reasoning (<code>--why</code>, stdlib reader) · <b>check</b> the seal (Ed25519, seal tool).</sub><br>
+<sub><b><a href="MANIFESTO.md">Read the manifesto →</a></b> — memory is context, not results.</sub>
 
 <p>
   <img src="https://img.shields.io/badge/spec-v3_draft-111111?style=flat-square" alt="spec v3 draft">
