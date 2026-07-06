@@ -7,7 +7,7 @@
 
 # `.laplaspack`
 
-**The open format for portable AI memory.**<br>
+**The open format for editable, portable AI memory.**<br>
 One file that holds a mind — typed entities, causal links, human thoughts, and the provenance of how they got there.<br>
 <sub>Verifiable two ways, both offline: <b>walk</b> the reasoning (<code>--why</code>, stdlib reader) · <b>check</b> the seal (Ed25519, seal tool).</sub>
 
